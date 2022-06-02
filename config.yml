@@ -1,0 +1,28 @@
+bot:
+  token: your_token
+  admins:
+    - 269019356
+
+settings:
+
+db:
+  username: postgres
+  password: postgres
+  host: localhost
+  port: 5432
+  db_name: hashdb
+
+payment:
+  cryptocloud:
+    create_url: https://cryptocloud.pro/api/v2/invoice/create
+    status_url: https://cryptocloud.plus/api/v2/invoice/status
+    shop_id: your_shop_id
+    api_key: your_key
+
+  qiwi:
+    token: your_token
+
+hash_api:
+    url: https://md5decrypt.net/en/Api/api.php
+    email: your_email
+    code: your_code
