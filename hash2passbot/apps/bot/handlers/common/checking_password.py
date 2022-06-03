@@ -1,6 +1,5 @@
 from aiogram import Dispatcher, Router, types
 from aiogram.dispatcher.fsm.context import FSMContext
-from aiogram.utils import markdown
 from loguru import logger
 
 from hash2passbot.apps.bot import temp
@@ -23,16 +22,18 @@ async def _password_found(user, _hash, found_password, message, sub):
 
     if sub:
         await user.subscription.decr()
-        answer = _("Хеш:\n{}\nсоответствует строке пароля:\n{}").format(markdown.hbold(_hash),
-                                                                        markdown.hbold(found_password.password))
+        # _hash = markdown.hbold(_hash)
+        # password = markdown.hbold(found_password.password)
+        password = found_password.password
+        answer = _("Хеш:\n{}\nсоответствует строке пароля:\n{}").format(_hash, password)
         answer = _("{}\n\nКоличество оставшихся запросов: {}").format(answer, user.subscription.limit)
         # answer.format(found_password.password)
         # answer.format(markdown.hbold(found_password.password))
     else:
-        answer = _("Хеш:\n{}\nсоответствует строке пароля:\n{}").format(markdown.hbold(_hash),
-                                                                        markdown.hbold(
-                                                                            blur_password(found_password.password))
-                                                                        )
+        # _hash = markdown.hbold(_hash)
+        # password = markdown.hbold(found_password.password)
+        password = blur_password(found_password.password)
+        answer = _("Хеш:\n{}\nсоответствует строке пароля:\n{}").format(_hash, password)
         answer = _("{}\nЧтобы увидеть пароль приобретите запросы через меню.").format(answer, _hash)
     await message.answer(answer)
 
@@ -63,10 +64,12 @@ async def search(user, _hash, hash_type, message, sub):
         else:
             temp.STATS.not_found_count += 1
             logger.info(f"Пароль к хешу {_hash} [{hash_type}] не найден")
-            await message.answer(_("Не удалось найти пароль по хешу {}").format(markdown.hbold(_hash)))
+            # _hash = markdown.hbold(_hash)
+            await message.answer(_("Не удалось найти пароль по хешу {}").format(_hash))
 
     else:
         logger.info(f"Пароль к хешу: {_hash} [{hash_type}] не найден")
+        # _hash = markdown.hbold(_hash)
         await message.answer(_("Пароль для хеша {} не найден в ограниченной базе. "
                                "Для поиска в расширенной базе приобретите запросы через меню бота.").format(_hash))
 

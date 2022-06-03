@@ -7,7 +7,7 @@ from hash2passbot.apps.bot.middleware.language_middleware import setup_lang_midd
 from hash2passbot.config.config import config
 
 logger.info(config.bot.token)
-bot = Bot(token=config.bot.token, parse_mode="html")
+bot = Bot(token=config.bot.token)
 storage = MemoryStorage()
 dp = Dispatcher(storage=storage)
 scheduler = AsyncIOScheduler(timezone="Europe/Moscow")

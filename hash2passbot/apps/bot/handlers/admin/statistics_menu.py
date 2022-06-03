@@ -49,7 +49,7 @@ async def statistics_start(call: types.CallbackQuery, state: FSMContext):
             f"   📊 Найдено  через API: {bold(temp.STATS.found_via_api_count)} ({found_via_api_count}%)\n"
             f"   📊 НЕ Найдено: {bold(temp.STATS.not_found_count)} ({not_found_count})%")
 
-    await call.message.answer(answer, reply_markup=admin_markups.back())
+    await call.message.answer(answer,"html", reply_markup=admin_markups.back())
 
 
 async def users_count(call: types.CallbackQuery, state: FSMContext):
