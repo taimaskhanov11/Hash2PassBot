@@ -15,7 +15,7 @@ class Action(str, Enum):
 
 class UserCallback(CallbackData, prefix="user"):
     pk: int
-    action: str
+    action: Action
 
 
 class ChannelCallback(CallbackData, prefix="channel"):

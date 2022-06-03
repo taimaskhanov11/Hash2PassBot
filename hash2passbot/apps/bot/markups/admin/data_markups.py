@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardMarkup, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
-from hash2passbot.apps.bot.callback_data.base_callback import SubscriptionCallback, Action
+from hash2passbot.apps.bot.callback_data.base_callback import SubscriptionCallback, Action, UserCallback
 from hash2passbot.apps.bot.markups.admin.admin_markups import back_to_admin
 from hash2passbot.db.models import Subscription
 
@@ -24,7 +24,8 @@ def edit_subscription() -> ReplyKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True, input_field_placeholder="Введите нужно количество")
 
 
-def edit_subscription_finish() -> InlineKeyboardMarkup:
+def edit_subscription_finish(user_pk) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    builder.row(back_to_admin)
+    # builder.row(back_to_admin)
+    builder.button(text="⬅️ Назад", callback_data=UserCallback(pk=user_pk, action=Action.view))
     return builder.as_markup()

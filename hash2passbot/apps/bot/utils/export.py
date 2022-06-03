@@ -2,7 +2,7 @@ from unittest import mock
 
 from loguru import logger
 
-from hash2passbot.apps.bot.temp import STATS
+from hash2passbot.apps.bot import temp
 from hash2passbot.config.config import config
 from hash2passbot.db.models import User
 
@@ -15,7 +15,8 @@ fields_nums = {
 
 
 async def save_statistics():
-    await STATS.save()
+    # todo 6/3/2022 1:29 PM taima: обновление и перестройка
+    await temp.STATS.save()
     logger.success(f"Статистика сохранена")
 
 

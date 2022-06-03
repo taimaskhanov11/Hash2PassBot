@@ -23,13 +23,13 @@ async def _password_found(user, _hash, found_password, message, sub):
 
     if sub:
         await user.subscription.decr()
-        answer = _("Хеш {}\nсоответствует строке пароля {}").format(markdown.hbold(_hash),
+        answer = _("Хеш:\n{}\nсоответствует строке пароля:\n{}").format(markdown.hbold(_hash),
                                                                     markdown.hbold(found_password.password))
-        answer = _("{}\nКоличество оставшихся запросов: {}").format(answer, user.subscription.limit)
+        answer = _("{}\n\nКоличество оставшихся запросов: {}").format(answer, user.subscription.limit)
         # answer.format(found_password.password)
         # answer.format(markdown.hbold(found_password.password))
     else:
-        answer = _("Хеш {}\nсоответствует строке пароля: {}").format(markdown.hbold(_hash),
+        answer = _("Хеш:\n{}\nсоответствует строке пароля:\n{}").format(markdown.hbold(_hash),
                                                                      markdown.hbold(
                                                                          blur_password(found_password.password))
                                                                      )
@@ -75,7 +75,7 @@ async def get_password_hash(message: types.Message, user: User, state: FSMContex
         await message.answer(_("Ожидайте завершения предыдущего поиска"))
         return
     try:
-        if hash_type := await hash_is_valid(_hash, message):
+        if hash_type := await hash_is_valid(_hash):
             async with user:
                 temp.STATS.total_requests_count += 1
 

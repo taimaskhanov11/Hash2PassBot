@@ -17,7 +17,7 @@ class AbstractSubscription(models.Model):
 # todo 5/31/2022 12:38 PM taima: сделать дневной лимит
 class SubscriptionTemplate(models.Model):
     """Шаблоны для создания подписок"""
-    title = fields.CharField(255, default="Базовая подписка")
+    title = fields.CharField(255, default="Базовая подписка", index=True)
     price = fields.IntField(default=0)
     limit = fields.IntField(null=True, default=config.bot.default_limit)
 
@@ -46,6 +46,7 @@ class SubscriptionTemplate(models.Model):
 
 class Subscription(SubscriptionTemplate):
     """Подписки с привязкой к пользователю"""
+    title = fields.CharField(255, default="Базовая подписка")
     connected_at = fields.DatetimeField(auto_now_add=True)
     user: "User" = fields.OneToOneField("models.User")
 
@@ -54,6 +55,10 @@ class Subscription(SubscriptionTemplate):
 
     async def set_limit(self, limit: int | str):
         self.limit = limit
+        await self.save(update_fields=["limit"])
+
+    async def add_limit(self, limit: int):
+        self.limit += limit
         await self.save(update_fields=["limit"])
 
     @classmethod

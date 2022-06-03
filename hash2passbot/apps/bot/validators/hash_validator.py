@@ -2,18 +2,22 @@ import contextlib
 import re
 
 import hashid
-from aiogram import types
 from loguru import logger
 
 alphabet = re.compile("[a-zA-Z]")
 
 
-async def hash_is_valid(_hash: str, message: types.Message) -> bool | str:
+async def hash_is_valid(_hash: str) -> bool | str:
     hashID = hashid.HashID()
     logger.debug(f"Попытка определить тип хеша {_hash}")
+
+    if len(_hash) < 20:
+        return False
+
     with contextlib.suppress(StopIteration):
         hash_type: hashid.HashInfo = next(hashID.identifyHash(_hash))
         logger.info(f"Возможный тип хеша {_hash} -> {hash_type.name}")
+
         if len(_hash) == 32:
             return "md5"
         elif len(_hash) == 40:

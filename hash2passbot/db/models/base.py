@@ -69,7 +69,7 @@ class Password(models.Model):
                         password = await ApiPassword.create(
                             password=password,
                             hash=_hash,
-                            hash_type=hash_type
+                            algorithm=hash_type
                         )
                         return password
                 # return password
@@ -97,6 +97,34 @@ class User(models.Model):
     #     table = "users"
     # async def create
 
+    async def __aenter__(self):
+        # Включение режима блокировки пока запрос не завершиться
+        await self.switch_search_to(True)
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        # Отключение режима поиска
+        await self.switch_search_to(False)
+        if exc_type:
+            logger.exception(f"{exc_type}, {exc_val}, {exc_tb}")
+
+
+    # async def get_sub_user(self, user_id:, bot):
+
+
+
+    async def switch_search_to(self, status: bool):
+        self.is_search = status
+        await self.save(update_fields=["is_search"])
+
+    async def get_payments(self) -> list[InvoiceCrypto, InvoiceQiwi]:
+        await self.fetch_related("subscription")
+        invoice_cryptos = await self.invoice_cryptos.filter(is_paid=True)
+        invoice_qiwis = await self.invoice_qiwis.filter(is_paid=True)
+        invoice_cryptos.extend(invoice_qiwis)
+        invoice_cryptos.sort(key=lambda x: x.created_at)
+        return invoice_cryptos
+
     @classmethod
     async def count_all(cls):
         return await cls.all().count()
@@ -112,25 +140,10 @@ class User(models.Model):
             await Subscription.create(user=user)
             return user
 
-    async def switch_search_to(self, status: bool):
-        self.is_search = status
-        await self.save(update_fields=["is_search"])
-
     @classmethod
     async def reset_search(cls):
         count = await cls.filter(is_search=True).update(is_search=False)
         logger.trace(f"Сброс состояния поиска: {count}")
-
-    async def __aenter__(self):
-        # Включение режима блокировки пока запрос не завершиться
-        await self.switch_search_to(True)
-        return self
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        # Отключение режима поиска
-        await self.switch_search_to(False)
-        if exc_type:
-            logger.exception(f"{exc_type}, {exc_val}, {exc_tb}")
 
     @classmethod
     async def export_users(cls,

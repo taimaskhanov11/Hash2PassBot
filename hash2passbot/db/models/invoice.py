@@ -1,4 +1,5 @@
 import datetime
+import re
 import typing
 
 from aiogram.client.session import aiohttp
@@ -8,6 +9,8 @@ from tortoise.transactions import atomic
 
 from hash2passbot.config.config import QIWI_CLIENT, TZ, config
 from .subscription import SubscriptionTemplate
+from ...apps.api.outgoing_requests import update_unlimited_subscription
+from ...loader import bot
 
 if typing.TYPE_CHECKING:
     from .base import User
@@ -19,11 +22,12 @@ class InvoiceAbstract(models.Model):
     # amount = fields.DecimalField(17, 7)
     subscription_template: SubscriptionTemplate = fields.ForeignKeyField("models.SubscriptionTemplate",
                                                                          on_delete=fields.CASCADE)
+    user: "User" = fields.ForeignKeyField("models.User", on_delete=fields.CASCADE)
     currency = fields.CharField(5, default="RUB", description="RUB")
     amount = fields.DecimalField(17, 7)
     invoice_id = fields.CharField(50, index=True)
-    created_at = fields.DatetimeField(default=datetime.datetime.now())
-    expire_at = fields.DatetimeField(default=datetime.datetime.now() + datetime.timedelta(minutes=30))
+    created_at = fields.DatetimeField(default=datetime.datetime.now(TZ))
+    expire_at = fields.DatetimeField(default=datetime.datetime.now(TZ) + datetime.timedelta(minutes=30))
     email = fields.CharField(20, null=True)
     pay_url = fields.CharField(255)
     is_paid = fields.BooleanField(default=False)
@@ -37,13 +41,18 @@ class InvoiceAbstract(models.Model):
     async def successfully_paid(self):
         await self.fetch_related("user__subscription", "subscription_template")
         # await self.fetch_related("subscription_template")
-
         self.user.subscription.title = self.subscription_template.title
         self.user.subscription.limit += self.subscription_template.limit
         self.user.subscription.price = self.subscription_template.price
         self.is_paid = True
         await self.user.subscription.save()
         await self.save(update_fields=["is_paid"])
+        res = re.match(r".+безлимит.*(\d) мес.", self.subscription_template.title)
+        if res:
+            month = int(res[1])
+            await update_unlimited_subscription(self.user, 30 * month)
+            await bot.send_message(self.user.user_id,
+                                   f"Так же добавлена подписка безлимитная подписка в партнерском боте @MailLeaksBot на {month} мес")
 
     async def check_payment(self) -> bool:
         pass
@@ -102,7 +111,7 @@ class InvoiceCrypto(InvoiceAbstract):
                              shop_id: str = config.payment.cryptocloud.shop_id,
                              lifetime: int = 60) -> 'InvoiceCrypto':
         cryptocloud = config.payment.cryptocloud
-        async with aiohttp.ClientSession(headers={"Authorization": f"Token {cryptocloud.api_key}"}) as session:
+        async with aiohttp.ClientSession(headers=headers) as session:
             data = dict(
                 amount=amount,
                 currency=currency,

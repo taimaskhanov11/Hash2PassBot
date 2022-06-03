@@ -39,15 +39,17 @@ async def start():
         write=True,
     )
 
+    # print(await bot.get_chat(5205775566))
     dp.startup.register(start_up_message)
     # dp.shutdown.register(on_shutdown)
 
     # Установка команд бота
     await set_commands(bot)
-    dp.message.filter(F.chat.type == "private")
+
     # Инициализация бд
     await init_db()
 
+    dp.message.filter(F.chat.type == "private")
     # Меню админа
     register_admin_handlers(dp)
 
@@ -65,7 +67,6 @@ async def start():
     # Регистрация фильтров
 
     temp.STATS, _create = await Statistic.get_or_create(pk=1)
-
     scheduler.add_job(making_backup, "interval", hours=1)
     scheduler.add_job(save_statistics, "interval", minutes=10)
     scheduler.add_job(User.reset_search, "interval", minutes=5)
@@ -76,7 +77,7 @@ async def start():
 
 def main():
     asyncio.run(start())
-    asyncio.get_event_loop()
+    # asyncio.get_event_loop()
 
 
 if __name__ == "__main__":

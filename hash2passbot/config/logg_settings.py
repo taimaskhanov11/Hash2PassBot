@@ -25,8 +25,8 @@ def init_logging(filename="", old_logger=True, level="TRACE", old_level=logging.
             sink=Path(LOG_DIR, f"base{filename}.log"),
             level=level,
             enqueue=True,
-            encoding="utf-8",
             diagnose=True,
+            encoding="utf-8",
             rotation="5MB",
             compression="zip",
         )

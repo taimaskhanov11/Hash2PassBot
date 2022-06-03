@@ -20,7 +20,7 @@ async def admin_start(message: types.CallbackQuery | types.Message, state: FSMCo
     await state.clear()
     if isinstance(message, types.CallbackQuery):
         message = message.message
-    await message.answer(f"Выберите функцию", reply_markup=admin_markups.admin_start())
+    await message.answer(f"Админ меню", reply_markup=admin_markups.admin_start())
 
 
 async def export_users(call: types.CallbackQuery | types.Message, state: FSMContext):

@@ -18,11 +18,12 @@ async def check_subscribe(call: types.CallbackQuery, state: FSMContext):
     return False
 
 
-async def start(message: types.Message | types.CallbackQuery, user: User, state: FSMContext):
+async def start(message: types.Message | types.CallbackQuery, user: User, is_new: bool, state: FSMContext):
     await state.clear()
     if isinstance(message, types.CallbackQuery):
         message = message.message
-    await message.answer(_("Главное меню!"), reply_markup=common_markups.start())
+    await message.answer(_("Сервис по поиску строки пароля по соответствующему хешу."),
+                         reply_markup=common_markups.start())
 
     # await message.answer(b"asd")
 
@@ -39,7 +40,13 @@ async def profile(message: types.Message, user: User, state: FSMContext):
 
 
 async def description(message: types.Message, state: FSMContext):
-    await message.answer(_("Профиль"), reply_markup=common_markups.description())
+    await message.answer(_(
+        "Отправьте боту имя почтового ящика и получите список паролей от различных аккаунтов, "
+        "которые регистрировались с использованием целевого почтового ящика. "
+        "Что есть у нас в базе можно посмотреть тут: "
+        "https://telegra.ph/Spisok-utechek-zagruzhennyh-v-bazu-dannyh-telegram-bota-MailLeaksBot-01-24"),
+        reply_markup=common_markups.description()
+    )
 
 
 async def support(message: types.Message, state: FSMContext):
@@ -57,6 +64,6 @@ def register_common(dp: Dispatcher):
     callback(start, text="start", state="*")
 
     message(profile, text_startswith="👤")
-    message(description, text_startswith="🗒")
+    message(description, text_startswith="📄")
     message(support, text_startswith="🙋‍♂")
     callback(check_subscribe, text="check_subscribe", state="*")
