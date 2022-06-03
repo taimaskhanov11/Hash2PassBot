@@ -48,7 +48,7 @@ class Item(BaseModel):
         if user.subscription.limit:
             if user.subscription.limit < len(self.hashs):
                 return f"Запросов может не хватить для расшифровки всех хешей, " \
-                       f"перед расшифровкой нужно докупить запросы в партнерском боте @Hash2PassBot"
+                       f"перед расшифровкой нужно докупить запросы в партнерском боте @QrchainTokenCheckBot"
 
             for _hash in self.hashs:
                 await search(user, _hash.hash, _hash.hash_type, message, sub=True)
