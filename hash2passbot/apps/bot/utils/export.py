@@ -16,6 +16,13 @@ fields_nums = {
 
 async def save_statistics():
     # todo 6/3/2022 1:29 PM taima: обновление и перестройка
+    data = dict(temp.STATS)
+    await temp.STATS.refresh_from_db()
+    temp.STATS.total_requests_count = data["total_requests_count"]
+    temp.STATS.found_local_count = data["found_local_count"]
+    temp.STATS.found_in_saved_count = data["found_in_saved_count"]
+    temp.STATS.found_via_api_count = data["found_via_api_count"]
+    temp.STATS.not_found_count = data["not_found_count"]
     await temp.STATS.save()
     logger.success(f"Статистика сохранена")
 
