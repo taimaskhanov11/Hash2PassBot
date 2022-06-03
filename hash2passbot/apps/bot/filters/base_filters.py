@@ -33,4 +33,3 @@ class ChannelSubscriptionFilter(BaseFilter):
                              reply_markup=common_markups.channel_status_check(SUBSCRIPTION_CHANNELS))
         # return {"is_sub": False}
         return False
-

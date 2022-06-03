@@ -1,9 +1,8 @@
 # todo 6/3/2022 2:31 PM taima:
 import asyncio
-
+import typing
 
 import aiohttp
-import typing
 
 from hash2passbot.config.config import config
 from hash2passbot.db import init_db
@@ -31,5 +30,7 @@ async def main():
     await init_db()
     user = await User.first()
     print(await update_unlimited_subscription(user, 30))
+
+
 if __name__ == '__main__':
     asyncio.run(main())

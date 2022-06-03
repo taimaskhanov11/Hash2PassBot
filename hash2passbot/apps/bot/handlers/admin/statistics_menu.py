@@ -1,10 +1,11 @@
 from aiogram import Router, types
 from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.dispatcher.fsm.state import StatesGroup, State
+from aiogram.utils import markdown
 
 from hash2passbot.apps.bot import temp
 from hash2passbot.apps.bot.markups.admin import statistics_markups, admin_markups
-from hash2passbot.db.models import User, Subscription
+from hash2passbot.db.models import User, Subscription, Statistic
 
 router = Router()
 
@@ -28,17 +29,25 @@ async def statistics_start(call: types.CallbackQuery, state: FSMContext):
     all_count = await User.count_all()
     today_count = await User.count_new_today()
     all_limits = await Subscription.all_limits()
-    answer = (f"📊 Общее число пользователей: {all_count}\n"
-              f"📊 Новых пользователей за сегодня: {today_count}\n"
-              f"📊 Общее число выданных всем пользователям запросов: {all_limits}\n\n"
-              f"📊 Всего запросов сделано пользователями: {temp.STATS.total_requests_count} (100%)\n"
+    # await save_statistics()
+    temp.STATS = await Statistic.first()
+    bold = markdown.hbold
+    answer = (f"📊 Общее число пользователей: {bold(all_count)}\n"
+              f"📊 Новых пользователей за сегодня: {bold(today_count)}\n"
+              f"📊 Общее число выданных всем пользователям запросов: {bold(all_limits)}\n\n"
+              f"📊 Всего запросов сделано пользователями: {bold(temp.STATS.total_requests_count)} (100%)\n"
               )
+
     if temp.STATS.total_requests_count:
+        found_local_count = bold(round(100 * (temp.STATS.found_local_count / temp.STATS.total_requests_count), 2))
+        found_in_saved_count = bold(round(100 * (temp.STATS.found_in_saved_count / temp.STATS.total_requests_count), 2))
+        found_via_api_count = bold(round(100 * (temp.STATS.found_via_api_count / temp.STATS.total_requests_count), 2))
+        not_found_count = bold(round(100 * (temp.STATS.not_found_count / temp.STATS.total_requests_count), 2))
         answer += (
-            f"   📊 Найдено  в локальной базе: {temp.STATS.found_local_count} ({100 * (temp.STATS.found_local_count / temp.STATS.total_requests_count)}%)\n"
-            f"   📊 Найдено  в сохраненной базе: {temp.STATS.found_in_saved_count} ({100 * (temp.STATS.found_in_saved_count / temp.STATS.total_requests_count)}%)\n"
-            f"   📊 Найдено  через API: {temp.STATS.found_via_api_count} ({100 * (temp.STATS.found_via_api_count / temp.STATS.total_requests_count)}%)\n"
-            f"   📊 НЕ Найдено: {temp.STATS.not_found_count} ({100 * (temp.STATS.not_found_count / temp.STATS.total_requests_count)})%")
+            f"   📊 Найдено  в локальной базе: {bold(temp.STATS.found_local_count)} ({found_local_count}%)\n"
+            f"   📊 Найдено  в сохраненной базе: {bold(temp.STATS.found_in_saved_count)} ({found_in_saved_count}%)\n"
+            f"   📊 Найдено  через API: {bold(temp.STATS.found_via_api_count)} ({found_via_api_count}%)\n"
+            f"   📊 НЕ Найдено: {bold(temp.STATS.not_found_count)} ({not_found_count})%")
 
     await call.message.answer(answer, reply_markup=admin_markups.back())
 

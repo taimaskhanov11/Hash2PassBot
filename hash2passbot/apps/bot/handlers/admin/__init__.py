@@ -3,8 +3,8 @@ from aiogram import Dispatcher, Router, F
 from hash2passbot.config.config import config
 from .admin_menu import register_admin
 from .bot_settings import register_bot_settings
-from .data_menu import register_data
 from .channel_menu import register_channel
+from .data_menu import register_data
 from .send_mail_handers import register_send_mail
 from .statistics_menu import register_statistics
 from .subscription_menu import register_subscriptions

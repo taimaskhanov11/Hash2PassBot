@@ -4,8 +4,9 @@ from loguru import logger
 from pydantic import BaseModel
 from tortoise.contrib.pydantic import pydantic_model_creator
 
+from hash2passbot.apps.bot import temp
 from hash2passbot.apps.bot.handlers.common.checking_password import search
-from hash2passbot.db.models import User
+from hash2passbot.db.models import User, Statistic
 
 PydanticUser = pydantic_model_creator(User)
 
@@ -41,7 +42,7 @@ class Item(BaseModel):
     hashs: list[Hash]
 
     async def get_password(self):
-
+        temp.STATS = await Statistic.first()
         user = await get_or_create_from_api(self.user)
         message = MockMessage()
         if user.subscription.limit:
@@ -56,7 +57,7 @@ class Item(BaseModel):
         else:
             for _hash in self.hashs:
                 await search(user, _hash.hash, _hash.hash_type, message, sub=False)
-
+        await temp.STATS.save()
         return self.prepare(
             message.answer_text) + f"\n\nКоличество оставшихся запросов в @Hash2PassBot {user.subscription.limit}"
         # return message.answer_text

@@ -108,10 +108,7 @@ class User(models.Model):
         if exc_type:
             logger.exception(f"{exc_type}, {exc_val}, {exc_tb}")
 
-
     # async def get_sub_user(self, user_id:, bot):
-
-
 
     async def switch_search_to(self, status: bool):
         self.is_search = status
