@@ -31,6 +31,7 @@ def init_loggings():
 async def initialize():
     # init_logging()
     init_logging(
+        "api",
         old_logger=True,
         level="TRACE",
         # old_level=logging.DEBUG,
