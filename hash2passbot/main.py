@@ -3,6 +3,7 @@ import logging
 
 from aiogram import Bot, F
 from aiogram.types import BotCommand
+from loguru import logger
 
 from hash2passbot.apps.bot import temp
 from hash2passbot.apps.bot.handlers.admin import register_admin_handlers
@@ -73,13 +74,14 @@ async def start():
     scheduler.add_job(User.reset_search, "interval", minutes=5)
     scheduler.add_job(checking_purchases, "interval", minutes=1)
     scheduler.start()
-    await dp.start_polling(bot, skip_updates=True)
-
+    try:
+        await dp.start_polling(bot, skip_updates=True)
+    except (KeyboardInterrupt, SystemExit):
+        logger.info(f"Stop polling")
 
 def main():
     asyncio.run(start())
     # asyncio.get_event_loop()
-
 
 if __name__ == "__main__":
     main()
