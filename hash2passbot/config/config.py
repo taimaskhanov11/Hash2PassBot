@@ -1,6 +1,5 @@
 import argparse
 import datetime
-import os
 from pathlib import Path
 from typing import Optional
 
@@ -38,15 +37,15 @@ class Bot(BaseModel):
 
 
 class Database(BaseModel):
-    username: str
+    user: str
     password: str
+    database: str
     host: str
     port: int
-    db_name: str
 
     @property
     def postgres_url(self):
-        return f"postgres://{self.username}:{self.password}@{self.host}:{self.port}/{self.db_name}"
+        return f"postgres://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
 
 
 class CryptoCloud(BaseModel):
@@ -79,6 +78,7 @@ class HashApi(BaseModel):
 class Config(BaseModel):
     bot: Bot
     db: Database
+    hash_db: Database
     payment: Payment | None
     hash_api: HashApi
     main_api_token: str
@@ -88,7 +88,7 @@ I18N_DOMAIN = "hash2passbot"
 LOCALES_DIR = BASE_DIR / "hash2passbot/apps/bot/locales"
 TZ = datetime.timezone(datetime.timedelta(hours=3))
 # config_file = parse_config()
-config_file = "config_dev.yml" if os.getenv("DEBUG") else "config.yml"
-# config_file = "config_dev.yml"
+# config_file = "config_dev.yml" if os.getenv("DEBUG") else "config.yml"
+config_file = "config_dev.yml"
 config = Config(**load_yaml(config_file))
 QIWI_CLIENT = QiwiP2PClient(secret_p2p=config.payment.qiwi.token)

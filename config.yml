@@ -6,11 +6,18 @@ bot:
 settings:
 
 db:
-  username: postgres
+  user: postgres
   password: postgres
+  database: hashpassbot
   host: localhost
   port: 5432
-  db_name: hashdb
+
+hash_db:
+  user: postgres
+  password: postgres
+  database: hashdb
+  host: localhost
+  port: 5432
 
 payment:
   cryptocloud:

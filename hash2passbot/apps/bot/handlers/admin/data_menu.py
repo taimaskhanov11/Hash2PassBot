@@ -26,11 +26,12 @@ async def getting_user(call: types.CallbackQuery, state: FSMContext):
     await state.set_state(GetUser.get)
 
 
-async def get_user(message: types.Message | types.CallbackQuery, state: FSMContext):
+async def _getter_user(message: types.Message | types.CallbackQuery, state: FSMContext,
+                       callback_data: UserCallback = None):
     await state.clear()
     if isinstance(message, types.CallbackQuery):
         await message.answer()
-        search_field = {"pk": message.data}
+        search_field = {"pk": callback_data.pk}
         message = message.message
     else:
         search_field = {
@@ -61,6 +62,14 @@ async def get_user(message: types.Message | types.CallbackQuery, state: FSMConte
         await message.answer("Пользователь не найден")
 
 
+async def get_user(message: types.Message, state: FSMContext):
+    await _getter_user(message, state)
+
+
+async def get_user_callback(call: types.CallbackQuery, callback_data: UserCallback, state: FSMContext):
+    await _getter_user(call, state, callback_data)
+
+
 async def edit_subscription(call: types.CallbackQuery, callback_data: SubscriptionCallback, state: FSMContext):
     await call.answer()
     await state.update_data(subscription_pk=callback_data.pk)
@@ -88,7 +97,7 @@ def register_data(dp: Router):
 
     callback(getting_user, text="getting_user", state="*")
     message(get_user, state=GetUser.get)
-    callback(get_user, UserCallback.filter(F.action == Action.view))
+    callback(get_user_callback, UserCallback.filter(F.action == Action.view))
 
     callback(edit_subscription, SubscriptionCallback.filter(F.action == Action.edit))
     message(edit_subscription_finish, state=EditSubscription.edit)

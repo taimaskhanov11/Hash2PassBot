@@ -13,8 +13,8 @@ from hash2passbot.apps.bot.handlers.errors.errors_handlers import register_error
 from hash2passbot.apps.bot.middleware.bot_middleware import BotMiddleware
 from hash2passbot.apps.bot.utils import start_up_message, checking_purchases
 from hash2passbot.config.logg_settings import init_logging
-from hash2passbot.db import init_db
-from hash2passbot.db.models import Statistic, User
+from hash2passbot.db import init_db, init_hash_db
+from hash2passbot.db.models import Statistic, User, Password
 from hash2passbot.db.utils.backup import making_backup
 from hash2passbot.loader import bot, dp, scheduler
 
@@ -47,6 +47,7 @@ async def start():
 
     # Инициализация бд
     await init_db()
+    Password.connection = await init_hash_db()
 
     dp.message.filter(F.chat.type == "private")
     # Меню админа

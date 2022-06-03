@@ -5,7 +5,8 @@ from loguru import logger
 
 from hash2passbot.config.config import LOG_DIR
 from hash2passbot.config.logg_settings import init_logging
-from hash2passbot.db import init_db
+from hash2passbot.db import init_db, init_hash_db
+from hash2passbot.db.models import Password
 
 
 def init_loggings():
@@ -38,6 +39,8 @@ async def initialize():
         write=True,
     )
     await init_db()
+    Password.connection = await init_hash_db()
+
     # temp.STATS, _create = await Statistic.get_or_create(pk=1)
     # scheduler.add_job(save_statistics, "interval", minutes=10)
     # scheduler.start()

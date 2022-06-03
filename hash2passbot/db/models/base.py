@@ -1,7 +1,9 @@
 import datetime
 import typing
+from unittest.mock import Mock
 
 import aiohttp
+import asyncpg
 from aiogram.types import BufferedInputFile
 from loguru import logger
 from tortoise import fields, models
@@ -34,7 +36,60 @@ class ApiPassword(models.Model):
         return await ApiPassword.get_or_none(hash=_hash, algorithm=hash_type)
 
 
-class Password(models.Model):
+class Password:
+    password = fields.CharField(512, source_field="pass")
+    hash_md5 = fields.CharField(40, index=True)
+    hash_md25 = fields.CharField(40, index=True)
+    hash_sh1 = fields.CharField(40, index=True)
+    connection: asyncpg.Connection | None = None
+
+    class Meta:
+        table = "passwords"
+
+    @classmethod
+    async def search_in_local(cls, _hash: str, hash_type) -> typing.Optional["Password"]:
+        logger.debug(f"Поиск хеша в локальной базе {_hash} [{hash_type}]")
+        found_password: asyncpg.Record | None = None
+        if len(_hash) == 40:
+            found_password = await cls.connection.fetchrow(f"""
+                select pass from passwords where hash_sh1 = '{_hash}'
+                """)
+        elif len(_hash) == 32:
+            await cls.connection.fetchrow(f"""
+                            select pass from passwords where hash_md5 ='{_hash}'
+                            """)
+            if not found_password:
+                found_password: asyncpg.Record = await cls.connection.fetchrow(f"""
+                    select pass from passwords where hash_md25 = '{_hash}'
+                    """)
+        if found_password:
+            mock = Mock()
+            mock.password = found_password.get("pass")
+            return mock
+        return found_password
+
+    # todo 6/1/2022 2:49 PM taima: поймать ошибку
+    @classmethod
+    async def search_in_api(cls, _hash: str, hash_type) -> typing.Optional[ApiPassword]:
+        logger.debug(f"Поиск хеша через API {_hash}[{hash_type}]")
+        async with aiohttp.ClientSession() as session:
+            async with session.get(config.hash_api.url, params=config.hash_api.params | {"hash": _hash,
+                                                                                         "hash_type": hash_type}) as res:
+                password = await res.text()
+                logger.debug(password)
+                if "ERROR CODE" not in password:
+                    if password.strip():
+                        password = await ApiPassword.create(
+                            password=password,
+                            hash=_hash,
+                            algorithm=hash_type
+                        )
+                        return password
+                # return password
+
+
+# legacy
+class Password_old:
     password = fields.CharField(512, source_field="pass")
     hash_md5 = fields.CharField(40, index=True)
     hash_md25 = fields.CharField(40, index=True)

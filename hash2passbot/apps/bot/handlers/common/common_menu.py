@@ -29,6 +29,7 @@ async def start(message: types.Message | types.CallbackQuery, user: User, is_new
 
 
 async def profile(message: types.Message, user: User, state: FSMContext):
+    await state.clear()
     answer = _("🔑 ID: {}\n"
                "👤 Логин: @{}\n"
                "📄 Оставшиеся успешные запросы - {}").format(
@@ -40,6 +41,7 @@ async def profile(message: types.Message, user: User, state: FSMContext):
 
 
 async def description(message: types.Message, state: FSMContext):
+    await state.clear()
     await message.answer(_(
         "Отправьте боту имя почтового ящика и получите список паролей от различных аккаунтов, "
         "которые регистрировались с использованием целевого почтового ящика. "
@@ -50,6 +52,7 @@ async def description(message: types.Message, state: FSMContext):
 
 
 async def support(message: types.Message, state: FSMContext):
+    await state.clear()
     await message.answer(_("По всем вопросам писать @chief_MailLeaks!"), reply_markup=common_markups.support())
 
 
@@ -63,7 +66,7 @@ def register_common(dp: Dispatcher):
     message(stop, commands="stop", state="*")
     callback(start, text="start", state="*")
 
-    message(profile, text_startswith="👤")
-    message(description, text_startswith="📄")
-    message(support, text_startswith="🙋‍♂")
+    message(profile, text_startswith="👤", state="*")
+    message(description, text_startswith="📄", state="*")
+    message(support, text_startswith="🙋‍♂", state="*")
     callback(check_subscribe, text="check_subscribe", state="*")
