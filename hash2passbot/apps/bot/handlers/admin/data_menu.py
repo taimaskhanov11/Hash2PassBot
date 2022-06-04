@@ -85,7 +85,7 @@ async def edit_subscription_finish(message: types.Message, state: FSMContext):
         await subscription.set_limit(message.text)
         await message.answer("✅ Количество запросов успешно обновлено",
                              reply_markup=data_markups.edit_subscription_finish(data["user_pk"]))
-        # await state.clear()
+        await state.set_state()
     else:
         await message.answer("Некорректный ввод")
 
