@@ -51,6 +51,8 @@ class Password:
     async def search_in_local(cls, _hash: str, hash_type) -> typing.Optional["Password"]:
         logger.debug(f"Поиск хеша в локальной базе {_hash} [{hash_type}]")
         found_password: asyncpg.Record | None = None
+        if not cls.connection:
+            cls.connection = await init_hash_db()
         if cls.connection.is_closed():
             cls.connection = await init_hash_db()
 
