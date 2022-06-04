@@ -83,6 +83,7 @@ async def get_password_hash(message: types.Message, user: User, state: FSMContex
         return
     try:
         if hash_type := await hash_is_valid(_hash):
+            await message.answer(_("Идет поиск, ожидайте..."))
             async with user:
                 temp.STATS = await Statistic.first()
                 # Для пользователей с подпиской
