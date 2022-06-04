@@ -59,12 +59,16 @@ class Item(BaseModel):
                 await search(user, _hash.hash, _hash.hash_type, message, sub=False)
         await temp.STATS.save()
         return self.prepare(
-            message.answer_text) + f"\n\nКоличество оставшихся запросов в @Hash2PassBot {user.subscription.limit}"
+            message.answer_text) + f"\n\nКоличество оставшихся запросов в @Hash2PassBot: {user.subscription.limit}"
         # return message.answer_text
 
     def prepare(self, text) -> str:
         # return re.sub(r"Количество оставшихся запросов: \d", text, "")
-        return re.sub(r"Количество оставшихся запросов: \d+", "", text)
+        new_text = re.sub(r"Количество оставшихся запросов: \d+", "", text)
+        new_text.replace("Чтобы увидеть пароль приобретите запросы через меню.",
+                         "Чтобы увидеть пароль приобретите запросы в боте @Hash2PassBot")
+
+        return new_text
 
 
 async def get_or_create_from_api(trans_user: TransUser) -> User:
