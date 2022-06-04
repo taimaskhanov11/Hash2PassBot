@@ -65,10 +65,9 @@ class Item(BaseModel):
     def prepare(self, text) -> str:
         # return re.sub(r"Количество оставшихся запросов: \d", text, "")
         new_text = re.sub(r"Количество оставшихся запросов: \d+", "", text)
-        new_text.replace("Чтобы увидеть пароль приобретите запросы через меню.",
-                         "Чтобы увидеть пароль приобретите запросы в боте @Hash2PassBot")
 
-        return new_text
+        return new_text.replace("Чтобы увидеть пароль приобретите запросы через меню.",
+                         "Чтобы увидеть пароль приобретите запросы в боте @Hash2PassBot")
 
 
 async def get_or_create_from_api(trans_user: TransUser) -> User:
