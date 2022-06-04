@@ -65,7 +65,7 @@ class Password:
             expression = f"""
                             select pass from passwords where hash_md5 ='{_hash}'
                             """
-            await cls.connection.fetchrow(expression)
+            found_password = await cls.connection.fetchrow(expression)
             if not found_password:
                 expression = f"""
                     select pass from passwords where hash_md25 = '{_hash}'
