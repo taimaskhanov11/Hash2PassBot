@@ -70,7 +70,7 @@ class Item(BaseModel):
 async def get_or_create_from_api(trans_user: TransUser) -> User:
     user, is_new = await User.get_or_create(
         user_id=trans_user.user_id,
-        defaults=trans_user.dict(),
+        defaults=trans_user.dict(exclude={"user_id", "locale"}),
     )
     if is_new:
         logger.info(f"Новый пользователь {user.user_id=}")
