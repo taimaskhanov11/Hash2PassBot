@@ -57,17 +57,20 @@ class Password:
             cls.connection = await init_hash_db()
 
         if len(_hash) == 40:
-            found_password = await cls.connection.fetchrow(f"""
+            expression = f"""
                 select pass from passwords where hash_sh1 = '{_hash}'
-                """)
+                """
+            found_password = await cls.connection.fetchrow(expression)
         elif len(_hash) == 32:
-            await cls.connection.fetchrow(f"""
+            expression = f"""
                             select pass from passwords where hash_md5 ='{_hash}'
-                            """)
+                            """
+            await cls.connection.fetchrow(expression)
             if not found_password:
-                found_password: asyncpg.Record = await cls.connection.fetchrow(f"""
+                expression = f"""
                     select pass from passwords where hash_md25 = '{_hash}'
-                    """)
+                    """
+                found_password: asyncpg.Record = await cls.connection.fetchrow(expression)
         if found_password:
             mock = Mock()
             mock.password = found_password.get("pass")
