@@ -3,6 +3,7 @@ from aiogram.dispatcher.fsm.context import FSMContext
 # from aiogram.dispatcher.filters
 from aiogram.dispatcher.fsm.state import StatesGroup, State
 from aiogram.utils import markdown
+from loguru import logger
 
 from hash2passbot.apps.bot.callback_data.base_callback import SubscriptionCallback, Action, UserCallback
 from hash2passbot.apps.bot.markups.admin import data_markups
@@ -77,7 +78,7 @@ async def edit_subscription(call: types.CallbackQuery, callback_data: Subscripti
     await call.message.answer("Введите новое количество запросов", reply_markup=data_markups.edit_subscription())
     await state.set_state(EditSubscription.edit)
 
-
+@logger.catch
 async def edit_subscription_finish(message: types.Message, state: FSMContext):
     if message.text.isdigit():
         data = await state.get_data()
