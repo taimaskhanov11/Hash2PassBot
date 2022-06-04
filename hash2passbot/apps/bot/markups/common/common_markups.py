@@ -31,17 +31,17 @@ def lang_choice():
 
 def profile():
     builder = InlineKeyboardBuilder()
-    builder.button(text=_("⬅️ Назад"), callback_data="start")
+    # builder.button(text=_("⬅️ Назад"), callback_data="start")
     return builder.as_markup()
 
 
 def description():
     builder = InlineKeyboardBuilder()
-    builder.button(text=_("⬅️ Назад"), callback_data="start")
+    # builder.button(text=_("⬅️ Назад"), callback_data="start")
     return builder.as_markup()
 
 
 def support():
     builder = InlineKeyboardBuilder()
-    builder.button(text=_("⬅️ Назад"), callback_data="start")
+    # builder.button(text=_("⬅️ Назад"), callback_data="start")
     return builder.as_markup()
