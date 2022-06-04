@@ -13,7 +13,7 @@ def get_subscriptions_templates(subscriptions: list[SubscriptionTemplate]) -> In
             text=str(sub),
             callback_data=SubscriptionTemplateCallback(pk=sub.pk, action=Action.view, for_purchase=True)
         )
-    builder.button(text=_("⬅️ Назад"), callback_data="start")
+    # builder.button(text=_("⬅️ Назад"), callback_data="start")
     builder.adjust(1)
 
     return builder.as_markup()
