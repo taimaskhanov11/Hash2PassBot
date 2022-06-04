@@ -74,7 +74,8 @@ class Password:
         if found_password:
             mock = Mock()
             mock.password = found_password.get("pass")
-            return mock
+            found_password = mock
+        logger.trace(found_password)
         return found_password
 
     # todo 6/1/2022 2:49 PM taima: поймать ошибку
