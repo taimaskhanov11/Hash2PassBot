@@ -6,7 +6,7 @@ from hash2passbot.loader import _
 
 def start():
     builder = ReplyKeyboardBuilder()
-    _menu = [_("👤 Профиль"), _("💵 Приобрести запросы"), _("📄 Описание"), _("🙋‍♂ Поддержка")]
+    _menu = [_("👤 Профиль"), _("💳 Приобрести запросы"), _("📄 Описание"), _("🙋‍♂ Поддержка")]
     for i in _menu:
         builder.add(types.KeyboardButton(text=i))
     builder.adjust(2)

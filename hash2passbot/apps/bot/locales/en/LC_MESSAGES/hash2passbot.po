@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-04 15:36+0300\n"
+"POT-Creation-Date: 2022-06-04 16:22+0300\n"
 "PO-Revision-Date: 2022-06-04 11:23+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -161,7 +161,8 @@ msgid "👤 Профиль"
 msgstr "👤 Profile"
 
 #: hash2passbot/apps/bot/markups/common/common_markups.py:9
-msgid "💵 Приобрести запросы"
+
+msgid "💳 Приобрести запросы"
 msgstr "💳 Purchase"
 
 #: hash2passbot/apps/bot/markups/common/common_markups.py:9
