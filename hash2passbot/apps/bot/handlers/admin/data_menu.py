@@ -57,7 +57,7 @@ async def _getter_user(message: types.Message | types.CallbackQuery, state: FSMC
 
         await state.update_data(user_pk=user.pk)
         await message.answer(answer, "html", reply_markup=data_markups.get_user(user.subscription))
-        await state.clear()
+        await state.set_state()
 
         # await part_sending()
     else:
@@ -78,6 +78,7 @@ async def edit_subscription(call: types.CallbackQuery, callback_data: Subscripti
     await call.message.answer("Введите новое количество запросов", reply_markup=data_markups.edit_subscription())
     await state.set_state(EditSubscription.edit)
 
+
 @logger.catch
 async def edit_subscription_finish(message: types.Message, state: FSMContext):
     if message.text.isdigit():
@@ -85,7 +86,8 @@ async def edit_subscription_finish(message: types.Message, state: FSMContext):
         subscription = await Subscription.get(pk=data["subscription_pk"])
         await subscription.set_limit(message.text)
         await message.answer("✅ Количество запросов успешно обновлено",
-                             reply_markup=data_markups.edit_subscription_finish(data["user_pk"]))
+                             reply_markup=data_markups.edit_subscription_finish(data.get("user_pk")) if data.get(
+                                 "user_pk") else None)
         await state.set_state()
     else:
         await message.answer("Некорректный ввод")
