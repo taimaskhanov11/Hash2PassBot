@@ -28,7 +28,6 @@ async def getting_user(call: types.CallbackQuery, state: FSMContext):
 
 async def _getter_user(message: types.Message | types.CallbackQuery, state: FSMContext,
                        callback_data: UserCallback = None):
-    await state.clear()
     if isinstance(message, types.CallbackQuery):
         await message.answer()
         search_field = {"pk": callback_data.pk}
@@ -57,6 +56,8 @@ async def _getter_user(message: types.Message | types.CallbackQuery, state: FSMC
 
         await state.update_data(user_pk=user.pk)
         await message.answer(answer, "html", reply_markup=data_markups.get_user(user.subscription))
+        await state.clear()
+
         # await part_sending()
     else:
         await message.answer("Пользователь не найден")
