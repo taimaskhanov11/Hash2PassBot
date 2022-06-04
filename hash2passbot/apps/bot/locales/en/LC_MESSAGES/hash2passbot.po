@@ -171,7 +171,7 @@ msgstr "📄 Description"
 
 #: hash2passbot/apps/bot/markups/common/common_markups.py:9
 msgid "🙋‍♂ Поддержка"
-msgstr "🙋 ♂ Support"
+msgstr "🙋‍♂ Support"
 
 #: hash2passbot/apps/bot/markups/common/common_markups.py:20
 msgid "✅ Я подписался"
