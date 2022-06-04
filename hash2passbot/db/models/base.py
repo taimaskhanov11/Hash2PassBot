@@ -12,6 +12,7 @@ from tortoise.models import MODEL
 from tortoise.transactions import in_transaction
 
 from hash2passbot.config.config import config
+from hash2passbot.db import init_hash_db
 from hash2passbot.db.models.invoice import InvoiceQiwi, InvoiceCrypto
 from hash2passbot.db.models.subscription import Subscription
 
@@ -50,6 +51,9 @@ class Password:
     async def search_in_local(cls, _hash: str, hash_type) -> typing.Optional["Password"]:
         logger.debug(f"Поиск хеша в локальной базе {_hash} [{hash_type}]")
         found_password: asyncpg.Record | None = None
+        if cls.connection.is_closed():
+            cls.connection = await init_hash_db()
+
         if len(_hash) == 40:
             found_password = await cls.connection.fetchrow(f"""
                 select pass from passwords where hash_sh1 = '{_hash}'

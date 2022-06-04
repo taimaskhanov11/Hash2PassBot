@@ -15,6 +15,5 @@ scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
 i18n = setup_lang_middleware(dp)
 _ = i18n.i18n.gettext
 
-
-def _(text) -> str:
-    return text
+# def _(text) -> str:
+#     return text

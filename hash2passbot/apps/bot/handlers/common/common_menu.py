@@ -1,6 +1,7 @@
 from aiogram import Dispatcher, Router, types
 from aiogram.dispatcher.fsm.context import FSMContext
 
+from hash2passbot.apps.bot.const import menu
 from hash2passbot.apps.bot.markups.common import common_markups
 from hash2passbot.apps.bot.utils import channel_status_check, stop
 from hash2passbot.db.models import User
@@ -12,9 +13,9 @@ router = Router()
 async def check_subscribe(call: types.CallbackQuery, state: FSMContext):
     await state.clear()
     if await channel_status_check(call.from_user.id):
-        await call.message.answer(_("✅ Подписки найдены, введите /start чтобы продолжить"))
+        await call.message.answer(menu.check_subscribe_find())
         return True
-    await call.answer(_("❌ Ты подписался не на все каналы"), show_alert=True)
+    await call.answer(menu.check_subscribe_find(), show_alert=True)
     return False
 
 
@@ -22,7 +23,12 @@ async def start(message: types.Message | types.CallbackQuery, user: User, is_new
     await state.clear()
     if isinstance(message, types.CallbackQuery):
         message = message.message
-    await message.answer(_("Сервис по поиску строки пароля по соответствующему хешу."),
+
+    if is_new:
+        await message.answer("🇷🇺 Выберите язык\n"
+                             "🇺🇸 Select a language", reply_markup=common_markups.lang_choice())
+        return
+    await message.answer(menu.start(),
                          reply_markup=common_markups.start())
 
     # await message.answer(b"asd")
@@ -30,9 +36,7 @@ async def start(message: types.Message | types.CallbackQuery, user: User, is_new
 
 async def profile(message: types.Message, user: User, state: FSMContext):
     await state.clear()
-    answer = _("🔑 ID: {}\n"
-               "👤 Логин: @{}\n"
-               "📄 Оставшиеся успешные запросы - {}").format(
+    answer = menu.profile().format(
         user.user_id,
         user.username,
         user.subscription.limit
@@ -42,18 +46,23 @@ async def profile(message: types.Message, user: User, state: FSMContext):
 
 async def description(message: types.Message, state: FSMContext):
     await state.clear()
-    await message.answer(_(
-        "Отправьте боту имя почтового ящика и получите список паролей от различных аккаунтов, "
-        "которые регистрировались с использованием целевого почтового ящика. "
-        "Что есть у нас в базе можно посмотреть тут: "
-        "https://telegra.ph/Spisok-utechek-zagruzhennyh-v-bazu-dannyh-telegram-bota-MailLeaksBot-01-24"),
-        reply_markup=common_markups.description()
-    )
+    await message.answer(menu.description(),
+                         reply_markup=common_markups.description()
+                         )
 
 
 async def support(message: types.Message, state: FSMContext):
     await state.clear()
-    await message.answer(_("По всем вопросам писать @chief_MailLeaks!"), reply_markup=common_markups.support())
+    await message.answer(menu.support(), reply_markup=common_markups.support())
+
+
+async def locale_choice(call: types.CallbackQuery, user: User, state: FSMContext):
+    if call.data == "ru":
+        user.locale = "ru"
+    else:
+        user.locale = "en"
+    await user.save(update_fields=["locale"])
+    await call.message.answer(_("✅ Язык успешно выбран, введите /start чтобы продолжить", locale=user.locale))
 
 
 def register_common(dp: Dispatcher):
@@ -65,6 +74,8 @@ def register_common(dp: Dispatcher):
     message(start, commands="start", state="*")
     message(stop, commands="stop", state="*")
     callback(start, text="start", state="*")
+    callback(locale_choice, text="ru", state="*")
+    callback(locale_choice, text="en", state="*")
 
     message(profile, text_startswith="👤", state="*")
     message(description, text_startswith="📄", state="*")

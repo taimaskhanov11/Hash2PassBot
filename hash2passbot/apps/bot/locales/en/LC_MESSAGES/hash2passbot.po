@@ -1,0 +1,208 @@
+# English translations for PROJECT.
+# Copyright (C) 2022 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-06-04 14:57+0300\n"
+"PO-Revision-Date: 2022-06-04 11:23+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.1\n"
+
+#: hash2passbot/apps/bot/const.py:9
+msgid "Сервис по поиску строки пароля по соответствующему хешу."
+msgstr "A service for searching for a password string by the corresponding hash."
+
+#: hash2passbot/apps/bot/const.py:12
+msgid ""
+"🔑 ID: {}\n"
+"👤 Логин: @{}\n"
+"📄 Оставшиеся успешные запросы - {}"
+msgstr ""
+"🔑 ID: {}\n"
+"👤 Login: @{}\n"
+"📄 Remaining successful requests - {}"
+
+#: hash2passbot/apps/bot/const.py:17
+msgid ""
+"Отправьте боту имя почтового ящика и получите список паролей от различных"
+" аккаунтов, которые регистрировались с использованием целевого почтового "
+"ящика. Что есть у нас в базе можно посмотреть тут: https://telegra.ph"
+"/Spisok-utechek-zagruzhennyh-v-bazu-dannyh-telegram-bota-"
+"MailLeaksBot-01-24"
+msgstr ""
+"Send the mailbox name to the bot and get a list of passwords from various"
+"  accounts that were registered using the target mailbox. What we have in"
+" the database can be viewed here: https://telegra.ph/Spisok-utechek-"
+"zagruzhennyh-v-bazu-dannyh-telegram-bota-MailLeaksBot-01-24"
+
+#: hash2passbot/apps/bot/const.py:24
+msgid "По всем вопросам писать @chief_MailLeaks!"
+msgstr "For all questions, write to @chief_Mail Leaks!"
+
+#: hash2passbot/apps/bot/const.py:27
+msgid "✅ Подписки найдены, введите /start чтобы продолжить"
+msgstr "✅ Subscriptions found, enter /start to continue"
+
+#: hash2passbot/apps/bot/const.py:30
+msgid "❌ Ты подписался не на все каналы"
+msgstr "❌ You have not subscribed to all channels"
+
+#: hash2passbot/apps/bot/const.py:33
+msgid ""
+"Приобретение запросов.\n"
+"При приобретении от 250 запросов – подписка на безлимитный доступ к "
+"@MailLeaksBot."
+msgstr ""
+"Acquisition of requests.\n"
+"When purchasing from 250 requests – subscription for unlimited access to "
+"@MailLeaksBot."
+
+#: hash2passbot/apps/bot/const.py:37
+msgid "Слишком много неоплаченных чеков, повторите попытку позже"
+msgstr "Too many unpaid checks, try again later"
+
+#: hash2passbot/apps/bot/const.py:40
+msgid "✅ Чек на оплату подписки {} Создан!"
+msgstr "✅ Subscription payment receipt {} Created!"
+
+#: hash2passbot/apps/bot/const.py:43
+msgid ""
+"❗️ Проверка оплаты происходит автоматически в течении 1 минуты для оплаты"
+" через QIWI и в течении 10 минут через криптовалюту.\n"
+"После успешной операции вам придет уведомление об успешной оплате."
+msgstr ""
+"❗️ Payment verification takes place automatically within 1 minute for "
+"payment via QIWI and within 10 minutes via cryptocurrency.\n"
+"After a successful operation, you will receive a notification about a "
+"successful payment."
+
+#: hash2passbot/apps/bot/const.py:48
+#: hash2passbot/apps/bot/handlers/common/checking_password.py:82
+msgid "Ожидайте завершения предыдущего поиска"
+msgstr "Wait for the previous search to be completed"
+
+#: hash2passbot/apps/bot/const.py:51
+#: hash2passbot/apps/bot/handlers/common/checking_password.py:99
+msgid "Некорректный hash"
+msgstr "Invalid hash"
+
+#: hash2passbot/apps/bot/const.py:54 hash2passbot/apps/bot/const.py:60
+#: hash2passbot/apps/bot/handlers/common/checking_password.py:28
+#: hash2passbot/apps/bot/handlers/common/checking_password.py:36
+msgid ""
+"Хеш:\n"
+"{}\n"
+"соответствует строке пароля:\n"
+"{}"
+msgstr ""
+"Hash:\n"
+"{}\n"
+"corresponds to the password string:\n"
+"{}"
+
+#: hash2passbot/apps/bot/const.py:57
+#: hash2passbot/apps/bot/handlers/common/checking_password.py:29
+msgid ""
+"{}\n"
+"\n"
+"Количество оставшихся запросов: {}"
+msgstr ""
+"{}\n"
+"\n"
+"Number of remaining requests: {}"
+
+#: hash2passbot/apps/bot/const.py:63
+#: hash2passbot/apps/bot/handlers/common/checking_password.py:37
+msgid ""
+"{}\n"
+"Чтобы увидеть пароль приобретите запросы через меню."
+msgstr ""
+"{}\n"
+"To see the password, purchase requests via the menu."
+
+#: hash2passbot/apps/bot/const.py:66
+#: hash2passbot/apps/bot/handlers/common/checking_password.py:68
+msgid "Не удалось найти пароль по хешу {}"
+msgstr "Couldn't find password by hash {}"
+
+#: hash2passbot/apps/bot/const.py:69
+#: hash2passbot/apps/bot/handlers/common/checking_password.py:73
+msgid ""
+"Пароль для хеша {} не найден в ограниченной базе. Для поиска в "
+"расширенной базе приобретите запросы через меню бота."
+msgstr ""
+"The password for the hash {} was not found in the restricted database. To"
+" search in the extended database, purchase queries through the bot menu."
+
+#: hash2passbot/apps/bot/filters/base_filters.py:32
+msgid "📍 Для того, чтобы пользоваться ботом, нужно подписаться на каналы:"
+msgstr "📍 In order to use the bot, you need to subscribe to channels:"
+
+#: hash2passbot/apps/bot/handlers/common/common_menu.py:65
+msgid "✅ Язык успешно выбран, введите /start чтобы продолжить"
+msgstr "✅ The language has been successfully selected, enter /start to continue"
+
+#: hash2passbot/apps/bot/markups/common/common_markups.py:9
+msgid "👤 Профиль"
+msgstr "👤 Profile"
+
+#: hash2passbot/apps/bot/markups/common/common_markups.py:9
+msgid "💵 Приобрести запросы"
+msgstr "💳 Purchase"
+
+#: hash2passbot/apps/bot/markups/common/common_markups.py:9
+msgid "📄 Описание"
+msgstr "📄 Description"
+
+#: hash2passbot/apps/bot/markups/common/common_markups.py:9
+msgid "🙋‍♂ Поддержка"
+msgstr "🙋 ♂ Support"
+
+#: hash2passbot/apps/bot/markups/common/common_markups.py:20
+msgid "✅ Я подписался"
+msgstr "✅ I subscribed"
+
+#: hash2passbot/apps/bot/markups/common/common_markups.py:34
+#: hash2passbot/apps/bot/markups/common/common_markups.py:40
+#: hash2passbot/apps/bot/markups/common/common_markups.py:46
+#: hash2passbot/apps/bot/markups/common/make_subscription_markups.py:16
+#: hash2passbot/apps/bot/markups/common/make_subscription_markups.py:26
+#: hash2passbot/apps/bot/markups/common/make_subscription_markups.py:36
+#: hash2passbot/apps/bot/markups/common/make_subscription_markups.py:46
+msgid "⬅️ Назад"
+msgstr "⬅️ Back"
+
+#: hash2passbot/apps/bot/markups/common/make_subscription_markups.py:24
+msgid "💳 Приобрести"
+msgstr "💳 Purchase"
+
+#: hash2passbot/apps/bot/markups/common/make_subscription_markups.py:34
+msgid "₿ Оплата криптовалютой"
+msgstr "₿ Payment in cryptocurrency"
+
+#: hash2passbot/apps/bot/markups/common/make_subscription_markups.py:35
+msgid "🥝 Оплата через QIWI"
+msgstr "🥝 Payment via QIWI"
+
+#: hash2passbot/apps/bot/markups/common/make_subscription_markups.py:44
+msgid "✅ Перейти к оплате"
+msgstr "✅ Go to payment"
+
+#: hash2passbot/apps/bot/markups/common/make_subscription_markups.py:45
+msgid "⏳ Я оплатил"
+msgstr "⏳ I paid"
+
+#: hash2passbot/apps/bot/utils/purchase.py:25
+msgid "✅ Подписка {} успешно оплачена"
+msgstr "✅ Subscription {} paid successfully"
+

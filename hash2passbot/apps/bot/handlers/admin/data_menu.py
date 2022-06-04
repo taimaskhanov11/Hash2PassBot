@@ -56,7 +56,7 @@ async def _getter_user(message: types.Message | types.CallbackQuery, state: FSMC
             answer += f"    ✓[{pay_title}] {date} -> {amount}р\n"
 
         await state.update_data(user_pk=user.pk)
-        await message.answer(answer,"html", reply_markup=data_markups.get_user(user.subscription))
+        await message.answer(answer, "html", reply_markup=data_markups.get_user(user.subscription))
         # await part_sending()
     else:
         await message.answer("Пользователь не найден")

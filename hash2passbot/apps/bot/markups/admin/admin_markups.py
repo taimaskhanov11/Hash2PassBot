@@ -24,6 +24,7 @@ def admin_start():
         ("⚙ Настройки бота", "bot_settings"),
         ("🧾 Подписки", SubscriptionTemplateCallback(action=Action.all)),
         ("👥 Экспорт пользователей", "export_users"),
+        ("✍ Изменить текст меню", "change_menu"),
     ]
     builder = InlineKeyboardBuilder()
     for i in keyword:

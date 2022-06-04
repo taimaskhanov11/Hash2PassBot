@@ -6,7 +6,7 @@ from hash2passbot.loader import _
 
 def start():
     builder = ReplyKeyboardBuilder()
-    _menu = ["👤 Профиль", "💵 Приобрести запросы", "📄 Описание", "🙋‍♂ Поддержка"]
+    _menu = [_("👤 Профиль"), _("💵 Приобрести запросы"), _("📄 Описание"), _("🙋‍♂ Поддержка")]
     for i in _menu:
         builder.add(types.KeyboardButton(text=i))
     builder.adjust(2)
@@ -19,6 +19,13 @@ def channel_status_check(channels: list[tuple[str, str]]):
         builder.button(text=f"Канал #{num}", url=f"https://t.me/{skin[1][1:]}")
     builder.button(text=_("✅ Я подписался"), callback_data="check_subscribe")
     builder.adjust(1)
+    return builder.as_markup()
+
+
+def lang_choice():
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Русский", callback_data="ru")
+    builder.button(text="English", callback_data="en")
     return builder.as_markup()
 
 

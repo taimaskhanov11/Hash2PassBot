@@ -6,11 +6,11 @@ from aiogram.dispatcher.fsm.state import StatesGroup, State
 from loguru import logger
 
 from hash2passbot.apps.bot.callback_data.base_callback import SubscriptionTemplateCallback, Action
+from hash2passbot.apps.bot.const import menu
 from hash2passbot.apps.bot.markups.common import make_subscription_markups
 from hash2passbot.config.config import TZ
 from hash2passbot.db.models import InvoiceCrypto, InvoiceQiwi
 from hash2passbot.db.models import SubscriptionTemplate, User
-from hash2passbot.loader import _
 
 router = Router()
 
@@ -28,7 +28,7 @@ async def get_subscriptions_templates(message: types.Message, state: FSMContext)
     # await call.answer()
     subscriptions = await SubscriptionTemplate.all()
     await message.answer(
-        _("Приобретение запросов.\nПри приобретении от 250 запросов – подписка на безлимитный доступ к @MailLeaksBot."),
+        menu.get_subscriptions_templates(),
         reply_markup=make_subscription_markups.get_subscriptions_templates(subscriptions))
 
 
@@ -75,7 +75,7 @@ async def subscription_purchase_method(call: types.CallbackQuery, user: User, st
         count = await cls.filter(expire_at__gte=datetime.datetime.now(TZ), is_paid=False).count()
         invoices_count += count
     if invoices_count > 10:
-        await call.message.answer(_("Слишком много неоплаченных чеков, повторите попытку позже"))
+        await call.message.answer(menu.subscription_purchase_method_unpaid_checks())
         await state.clear()
         return
 
@@ -85,7 +85,7 @@ async def subscription_purchase_method(call: types.CallbackQuery, user: User, st
     else:  # call.data == crypto
         logger.trace("crypto")
         invoice = await InvoiceCrypto.create_invoice(**purchase_data)
-    answer_text = _("✅ Чек на оплату подписки {} Создан!").format(subscription.view)
+    answer_text = menu.subscription_purchase_method_created_check().format(subscription.view)
     await call.message.answer(answer_text,
                               reply_markup=make_subscription_markups.subscription_purchase_method(invoice.pay_url))
     await state.clear()
@@ -93,9 +93,7 @@ async def subscription_purchase_method(call: types.CallbackQuery, user: User, st
 
 
 async def purchase_check(call: types.CallbackQuery, state: FSMContext):
-    await call.message.answer(_("❗️ Проверка оплаты происходит автоматически в течении 1 минуты для оплаты через QIWI "
-                                "и в течении 10 минут через криптовалюту.\n"
-                                "После успешной операции вам придет уведомление об успешной оплате."))
+    await call.message.answer(menu.purchase_check())
 
 
 def register_make_subscriptions(dp: Dispatcher):
@@ -104,7 +102,7 @@ def register_make_subscriptions(dp: Dispatcher):
     callback = router.callback_query.register
     message = router.message.register
 
-    message(get_subscriptions_templates, text_startswith="💵")
+    message(get_subscriptions_templates, text_startswith="💳")
     callback(get_subscriptions_templates, text="purchase")
     callback(view_subscription_template,
              SubscriptionTemplateCallback.filter((F.action == Action.view) & F.for_purchase))

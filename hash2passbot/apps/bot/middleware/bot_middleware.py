@@ -44,6 +44,7 @@ class BotMiddleware(BaseMiddleware):
         :param data:
         :return:
         """
+        # logger.trace(event)
         user_data = await get_user(event)
         data.update(**user_data)
         # logger.info(user_data)

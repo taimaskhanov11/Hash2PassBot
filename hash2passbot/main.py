@@ -7,8 +7,8 @@ from loguru import logger
 
 from hash2passbot.apps.bot import temp
 from hash2passbot.apps.bot.handlers.admin import register_admin_handlers
-from hash2passbot.apps.bot.handlers.common import register_common
 from hash2passbot.apps.bot.handlers.common.checking_password import register_check_password
+from hash2passbot.apps.bot.handlers.common.common_menu import register_common
 from hash2passbot.apps.bot.handlers.common.make_subscription import register_make_subscriptions
 from hash2passbot.apps.bot.handlers.errors.errors_handlers import register_error
 from hash2passbot.apps.bot.middleware.bot_middleware import BotMiddleware
@@ -79,9 +79,11 @@ async def start():
     except (KeyboardInterrupt, SystemExit):
         logger.info(f"Stop polling")
 
+
 def main():
     asyncio.run(start())
     # asyncio.get_event_loop()
+
 
 if __name__ == "__main__":
     main()
