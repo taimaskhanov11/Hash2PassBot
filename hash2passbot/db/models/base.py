@@ -28,7 +28,7 @@ class Statistic(models.Model):
 class ApiPassword(models.Model):
     """Пароль и хеши полученные через api"""
     password = fields.CharField(512, source_field="pass")
-    algorithm = fields.CharField(30, index=True)
+    algorithm = fields.CharField(255, index=True)
     hash = fields.CharField(255, index=True)
 
     @classmethod
