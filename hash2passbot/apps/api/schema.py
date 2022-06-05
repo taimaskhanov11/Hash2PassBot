@@ -57,7 +57,10 @@ class Item(BaseModel):
         # Для пользователей без подписки
         else:
             for _hash in self.hashs:
-                result = await search(user, _hash.hash, _hash.hash_type, message, sub=False)
+                try:
+                    result = await search(user, _hash.hash, _hash.hash_type, message, sub=False)
+                except Exception as e:
+                    logger.warning(e)
         await temp.STATS.save()
 
         if result:
@@ -74,7 +77,7 @@ class Item(BaseModel):
         new_text = re.sub(r"Количество оставшихся запросов: \d+\.?", "", text)
 
         return new_text.replace("Чтобы увидеть пароль приобретите запросы через меню.",
-                         "Чтобы увидеть пароль приобретите запросы в боте @Hash2PassBot")
+                                "Чтобы увидеть пароль приобретите запросы в боте @Hash2PassBot")
 
 
 async def get_or_create_from_api(trans_user: TransUser) -> User:
