@@ -58,7 +58,7 @@ class Password:
 
         if len(_hash) == 40:
             expression = f"""
-                select pass from passwords where hash_sh1 = '{_hash}'
+                select pass from passwords where hash_sha1 = '{_hash}'
                 """
             found_password = await cls.connection.fetchrow(expression)
         elif len(_hash) == 32:
