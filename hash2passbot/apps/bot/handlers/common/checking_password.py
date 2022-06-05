@@ -40,7 +40,7 @@ async def _password_found(user, _hash, found_password, message, sub, is_api=Fals
         answer = _("{}\nЧтобы увидеть пароль приобретите запросы через меню.", locale=user.locale).format(answer, _hash)
     await message.answer(answer)
 
-
+@logger.catch
 async def search(user, _hash, hash_type, message, sub):
     if sub:
         temp.STATS.total_requests_count += 1
