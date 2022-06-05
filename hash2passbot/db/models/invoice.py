@@ -19,7 +19,7 @@ headers = {"Authorization": f"Token {config.payment.cryptocloud.api_key}"}
 
 
 class InvoiceAbstract(models.Model):
-    # amount = fields.DecimalField(17, 7)
+    """Абстрактный класс для создания счета"""
     subscription_template: SubscriptionTemplate = fields.ForeignKeyField("models.SubscriptionTemplate",
                                                                          on_delete=fields.CASCADE)
     user: "User" = fields.ForeignKeyField("models.User", on_delete=fields.CASCADE)
@@ -47,13 +47,15 @@ class InvoiceAbstract(models.Model):
         self.is_paid = True
         await self.user.subscription.save()
         await self.save(update_fields=["is_paid"])
-        res = re.match(r".+безлимит.*(\d) мес.", self.subscription_template.title)
-        if res:
-            month = int(res[1])
-            await update_unlimited_subscription(self.user, 30 * month)
-            await bot.send_message(self.user.user_id,
-                                   f"Так же добавлена подписка безлимитная подписка в партнерском боте @MailLeaksBot на {month} мес")
-
+        try:
+            res = re.match(r".+безлимит.*(\d) мес.", self.subscription_template.title)
+            if res:
+                month = int(res[1])
+                await update_unlimited_subscription(self.user, 30 * month)
+                await bot.send_message(self.user.user_id,
+                                       f"Так же добавлена подписка безлимитная подписка в партнерском боте @MailLeaksBot на {month} мес")
+        except Exception as e:
+            logger.warning(f"{e}. Не запущен партнерский бот @MailLeaksBot")
     async def check_payment(self) -> bool:
         pass
 

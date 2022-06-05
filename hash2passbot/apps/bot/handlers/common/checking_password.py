@@ -17,7 +17,7 @@ def blur_password(password) -> str:
             f"{password[-1]}")
 
 
-async def _password_found(user, _hash, found_password, message, sub):
+async def _password_found(user, _hash, found_password, message, sub, is_api=False):
     logger.success(f"Пароль найден {_hash} -> {found_password.password}")
 
     if sub:
@@ -26,7 +26,10 @@ async def _password_found(user, _hash, found_password, message, sub):
         # password = markdown.hbold(found_password.password)
         password = found_password.password
         answer = _("Хеш:\n{}\nсоответствует строке пароля:\n{}", locale=user.locale).format(_hash, password)
-        answer = _("{}\n\nКоличество оставшихся запросов: {}", locale=user.locale).format(answer, user.subscription.limit)
+        if is_api:
+            answer = _("{}\n\nКоличество оставшихся запросов: {}.", locale=user.locale).format(answer, user.subscription.limit)
+        else:
+            answer = _("{}\n\nКоличество оставшихся запросов: {}", locale=user.locale).format(answer, user.subscription.limit)
         # answer.format(found_password.password)
         # answer.format(markdown.hbold(found_password.password))
     else:
@@ -60,7 +63,8 @@ async def search(user, _hash, hash_type, message, sub):
         if found_password := await Password.search_in_api(_hash, hash_type):
             temp.STATS.found_via_api_count += 1
             logger.success(f"Хеш {_hash} [{hash_type}] найден через API и сохранен в базе")
-            await _password_found(user, _hash, found_password, message, sub)
+            await _password_found(user, _hash, found_password, message, sub, is_api=True)
+            return True
         else:
             temp.STATS.not_found_count += 1
             logger.info(f"Пароль к хешу {_hash} [{hash_type}] не найден")

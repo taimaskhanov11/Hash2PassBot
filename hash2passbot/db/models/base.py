@@ -146,6 +146,7 @@ class Channel(models.Model):
 
 
 class User(models.Model):
+    """Хранит базовые данные пользователя"""
     user_id = fields.BigIntField(index=True, unique=True)
     username = fields.CharField(32, unique=True, index=True, null=True)
     first_name = fields.CharField(255, null=True)
@@ -193,7 +194,14 @@ class User(models.Model):
 
     @classmethod
     async def count_new_today(cls) -> int:
-        return await cls.filter(registered_at=datetime.date.today()).count()
+        date = datetime.date.today()
+        # return await cls.filter(registered_at=).count()
+        return await User.filter(
+            registered_at__year=date.year,
+            registered_at__month=date.month,
+            registered_at__day=date.day,
+        ).count()
+
 
     @classmethod
     async def create(cls: typing.Type[MODEL], using_db=False, **kwargs) -> MODEL:

@@ -45,26 +45,33 @@ class Item(BaseModel):
         temp.STATS = await Statistic.first()
         user = await get_or_create_from_api(self.user)
         message = MockMessage()
+        result = None
         if user.subscription.limit:
             if user.subscription.limit < len(self.hashs):
                 return f"Запросов может не хватить для расшифровки всех хешей, " \
                        f"перед расшифровкой нужно докупить запросы в партнерском боте @Hash2PassBot"
 
             for _hash in self.hashs:
-                await search(user, _hash.hash, _hash.hash_type, message, sub=True)
+                result = await search(user, _hash.hash, _hash.hash_type, message, sub=True)
 
         # Для пользователей без подписки
         else:
             for _hash in self.hashs:
-                await search(user, _hash.hash, _hash.hash_type, message, sub=False)
+                result = await search(user, _hash.hash, _hash.hash_type, message, sub=False)
         await temp.STATS.save()
-        return self.prepare(
-            message.answer_text) + f"\n\nКоличество оставшихся запросов в @Hash2PassBot: {user.subscription.limit}"
+
+        if result:
+            return self.prepare(
+                message.answer_text) + f"\n\nКоличество оставшихся запросов в @Hash2PassBot: {user.subscription.limit}."
+        else:
+            return self.prepare(
+                message.answer_text) + f"\n\nКоличество оставшихся запросов в @Hash2PassBot: {user.subscription.limit}"
+
         # return message.answer_text
 
     def prepare(self, text) -> str:
         # return re.sub(r"Количество оставшихся запросов: \d", text, "")
-        new_text = re.sub(r"Количество оставшихся запросов: \d+", "", text)
+        new_text = re.sub(r"Количество оставшихся запросов: \d+\.?", "", text)
 
         return new_text.replace("Чтобы увидеть пароль приобретите запросы через меню.",
                          "Чтобы увидеть пароль приобретите запросы в боте @Hash2PassBot")

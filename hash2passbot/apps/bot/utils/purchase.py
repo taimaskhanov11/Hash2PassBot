@@ -15,11 +15,14 @@ async def checking_purchases():
                                                                        is_paid=False)
         for invoice in invoices:
             logger.trace(f"Check invoice {invoice.invoice_id}[{invoice.amount}]")
-            if await invoice.check_payment():
-                await invoice.successfully_paid()
-                logger.success(
-                    f"The invoice [{cls.__name__}] [{invoice.user}]{invoice.amount} {invoice.currency} "
-                    f"has been successfully paid")
-                # await invoice.subscription_template
-                await bot.send_message(invoice.user.user_id,
-                                       _("✅ Подписка {} успешно оплачена").format(invoice.subscription_template))
+            try:
+                if await invoice.check_payment():
+                    await invoice.successfully_paid()
+                    logger.success(
+                        f"The invoice [{cls.__name__}] [{invoice.user}]{invoice.amount} {invoice.currency} "
+                        f"has been successfully paid")
+                    # await invoice.subscription_template
+                    await bot.send_message(invoice.user.user_id,
+                                           _("✅ Подписка {} успешно оплачена").format(invoice.subscription_template))
+            except Exception as e:
+                logger.warning(e)

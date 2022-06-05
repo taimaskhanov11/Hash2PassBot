@@ -3,69 +3,71 @@ from hash2passbot.loader import _
 
 class Menu:
 
-    def start(self):
-        return _("Сервис по поиску строки пароля по соответствующему хешу.")
+    def start(self, locale=None):
+        return _("Сервис по поиску строки пароля по соответствующему хешу.", locale=locale)
 
-    def profile(self):
+    def profile(self, locale=None):
         return _("🔑 ID: {}\n"
                  "👤 Логин: @{}\n"
-                 "📄 Оставшиеся успешные запросы - {}")
+                 "📄 Оставшиеся успешные запросы - {}", locale=locale)
 
-    def description(self):
+    def description(self, locale=None):
         return _(
             "Отправьте боту имя почтового ящика и получите список паролей от различных аккаунтов, "
             "которые регистрировались с использованием целевого почтового ящика. "
             "Что есть у нас в базе можно посмотреть тут: "
-            "https://telegra.ph/Spisok-utechek-zagruzhennyh-v-bazu-dannyh-telegram-bota-MailLeaksBot-01-24")
+            "https://telegra.ph/Spisok-utechek-zagruzhennyh-v-bazu-dannyh-telegram-bota-MailLeaksBot-01-24",
+            locale=locale)
 
-    def support(self):
-        return _("По всем вопросам писать @chief_MailLeaks!")
+    def support(self, locale=None):
+        return _("По всем вопросам писать @chief_MailLeaks!", locale=locale)
 
-    def check_subscribe_find(self):
-        return _("✅ Подписки найдены, введите /start чтобы продолжить")
+    def check_subscribe_find(self, locale=None):
+        return _("✅ Подписки найдены, введите /start чтобы продолжить", locale=locale)
 
-    def check_subscribe_not_find(self):
-        return _("❌ Ты подписался не на все каналы")
+    def check_subscribe_not_find(self, locale=None):
+        return _("❌ Ты подписался не на все каналы", locale=locale)
 
-    def get_subscriptions_templates(self):
+    def get_subscriptions_templates(self, locale=None):
         return _(
-            "Приобретение запросов.\nПри приобретении от 250 запросов – подписка на безлимитный доступ к @MailLeaksBot.")
+            "Приобретение запросов.\nПри приобретении от 250 запросов – подписка на безлимитный доступ к @MailLeaksBot.",
+            locale=locale)
 
-    def subscription_purchase_method_unpaid_checks(self):
-        return _("Слишком много неоплаченных чеков, повторите попытку позже")
+    def subscription_purchase_method_unpaid_checks(self, locale=None):
+        return _("Слишком много неоплаченных чеков, повторите попытку позже", locale=locale)
 
-    def subscription_purchase_method_created_check(self):
-        return _("✅ Чек на оплату подписки {} Создан!")
+    def subscription_purchase_method_created_check(self, locale=None):
+        return _("✅ Чек на оплату подписки {} Создан!", locale=locale)
 
-    def purchase_check(self):
+    def purchase_check(self, locale=None):
         return _("❗️ Проверка оплаты происходит автоматически в течении 1 минуты для оплаты через QIWI "
                  "и в течении 10 минут через криптовалюту.\n"
-                 "После успешной операции вам придет уведомление об успешной оплате.")
+                 "После успешной операции вам придет уведомление об успешной оплате.", locale=locale)
 
-    def get_password_hash_wait(self):
-        return _("Ожидайте завершения предыдущего поиска")
+    def get_password_hash_wait(self, locale=None):
+        return _("Ожидайте завершения предыдущего поиска", locale=locale)
 
-    def get_password_hash_incorrect(self):
+    def get_password_hash_incorrect(self, locale=None):
         return _("Некорректный hash")
 
-    def _password_found_sub_pass(self):
-        return _("Хеш:\n{}\nсоответствует строке пароля:\n{}")
+    def _password_found_sub_pass(self, locale=None):
+        return _("Хеш:\n{}\nсоответствует строке пароля:\n{}", locale=locale)
 
-    def _password_found_sub_requests(self):
-        return _("{}\n\nКоличество оставшихся запросов: {}")
+    def _password_found_sub_requests(self, locale=None):
+        return _("{}\n\nКоличество оставшихся запросов: {}", locale=locale)
 
-    def _password_found_unsub_pass(self):
-        return _("Хеш:\n{}\nсоответствует строке пароля:\n{}")
+    def _password_found_unsub_pass(self, locale=None):
+        return _("Хеш:\n{}\nсоответствует строке пароля:\n{}", locale=locale)
 
-    def _password_found_unsub_requests(self):
-        return _("{}\nЧтобы увидеть пароль приобретите запросы через меню.")
+    def _password_found_unsub_requests(self, locale=None):
+        return _("{}\nЧтобы увидеть пароль приобретите запросы через меню.", locale=locale)
 
-    def search_not_found(self):
-        return _("Не удалось найти пароль по хешу {}")
+    def search_not_found(self, locale=None):
+        return _("Не удалось найти пароль по хешу {}", locale=locale)
 
-    def search_unsub_not_found(self):
+    def search_unsub_not_found(self, locale=None):
         return _("Пароль для хеша {} не найден в ограниченной базе. "
-                 "Для поиска в расширенной базе приобретите запросы через меню бота.")
+                 "Для поиска в расширенной базе приобретите запросы через меню бота.", locale=locale)
 
     def method_list(self):
         return list(filter(

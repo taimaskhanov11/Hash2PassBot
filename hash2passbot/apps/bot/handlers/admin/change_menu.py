@@ -21,7 +21,7 @@ async def change_start(call: types.CallbackQuery, state: FSMContext):
     # for num, data in enumerate(menu.dict().items()):
     for num, key in enumerate(menu.method_list()):
         func = getattr(menu, key)
-        value = func()
+        value = func(locale="ru")
         answer += f"#{num}\n{key}\n{value}\n\n"
     await call.message.answer(f"Выберите поле для изменения:\n{answer}",
                               reply_markup=changer_menu_markups.change_start())
@@ -37,7 +37,11 @@ async def change_choice(call: types.CallbackQuery, state: FSMContext):
 
 async def change_finish(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    setattr(menu, data["change_field"], lambda: message.text)
+
+    def new_func(locale=None):
+        return message.text
+
+    setattr(menu, data["change_field"], new_func)
     await message.answer("Поле успешно изменено")
     await state.clear()
 

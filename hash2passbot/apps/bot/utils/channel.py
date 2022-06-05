@@ -6,6 +6,10 @@ from hash2passbot.apps.bot.temp import SUBSCRIPTION_CHANNELS
 from hash2passbot.loader import bot
 
 
+
+
+
+
 def parse_channel_link(text: str) -> tuple[str, str]:
     skin, link = text.split()
     if '@' in link:
