@@ -73,7 +73,7 @@ class HashApi(BaseModel):
     @property
     def params(self) -> dict:
         return {"email": self.email,
-                "code": self.code}
+                "key": self.code}
 
 
 class Config(BaseModel):

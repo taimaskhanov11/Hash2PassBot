@@ -34,7 +34,7 @@ class ApiPassword(models.Model):
     @classmethod
     async def search_in_saved(cls, _hash, hash_type) -> typing.Optional["ApiPassword"]:
         logger.debug(f"Поиск хеша в сохраненной базе {_hash}[{hash_type}]")
-        return await ApiPassword.get_or_none(hash=_hash, algorithm=hash_type)
+        return await ApiPassword.get_or_none(hash=_hash)
 
 
 class Password:
@@ -80,7 +80,7 @@ class Password:
 
     # todo 6/1/2022 2:49 PM taima: поймать ошибку
     @classmethod
-    async def search_in_api(cls, _hash: str, hash_type) -> typing.Optional[ApiPassword]:
+    async def search_in_api_old(cls, _hash: str, hash_type) -> typing.Optional[ApiPassword]:
         logger.debug(f"Поиск хеша через API {_hash}[{hash_type}]")
         async with aiohttp.ClientSession() as session:
             async with session.get(config.hash_api.url, params=config.hash_api.params | {"hash": _hash,
@@ -93,6 +93,22 @@ class Password:
                             password=password,
                             hash=_hash,
                             algorithm=hash_type
+                        )
+                        return password
+                # return password
+    @classmethod
+    async def search_in_api(cls, _hash: str, hash_type) -> typing.Optional[ApiPassword]:
+        logger.debug(f"Поиск хеша через API {_hash}[{hash_type}]")
+        async with aiohttp.ClientSession() as session:
+            async with session.get(config.hash_api.url, params=config.hash_api.params | {"hash": _hash}) as res:
+                password = await res.text()
+                logger.debug(password)
+                if "CMD5-ERROR" not in password:
+                    if password.strip():
+                        password = await ApiPassword.create(
+                            password=password,
+                            hash=_hash,
+                            algorithm=f"UNKNOWN_{hash_type}"
                         )
                         return password
                 # return password
