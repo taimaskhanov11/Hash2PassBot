@@ -9,3 +9,4 @@ SUBSCRIPTION_CHANNELS: list[tuple[str, str]] = []
 MAIL_SENDER: typing.Optional["MailSender"] = None
 BOT_RUNNING: bool = True
 STATS: Statistic | None = None
+MENU: dict[str, str] | None = None

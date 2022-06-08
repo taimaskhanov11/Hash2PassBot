@@ -2,10 +2,12 @@ from aiogram import Router, types
 from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.dispatcher.fsm.state import StatesGroup, State
 
+from hash2passbot.apps.bot import temp
 from hash2passbot.apps.bot.const import menu
 from hash2passbot.apps.bot.markups.admin import changer_menu_markups
 
 # from aiogram.dispatcher.filters
+from hash2passbot.config.config import write_yaml
 
 router = Router()
 
@@ -40,7 +42,8 @@ async def change_finish(message: types.Message, state: FSMContext):
 
     def new_func(locale=None):
         return message.text
-
+    temp.MENU[data["change_field"]] = message.text
+    write_yaml("menu.yaml", temp.MENU)
     setattr(menu, data["change_field"], new_func)
     await message.answer("Поле успешно изменено")
     await state.clear()

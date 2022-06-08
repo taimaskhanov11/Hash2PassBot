@@ -22,6 +22,11 @@ def load_yaml(file) -> dict | list:
         return yaml.safe_load(f)
 
 
+def write_yaml(file, data) -> None:
+    with open(Path(BASE_DIR, file), "w", encoding="utf-8") as f:
+        return yaml.dump(data, f)
+
+
 def parse_config():
     parser = argparse.ArgumentParser(description="config_file")
     parser.add_argument("-f", type=str)

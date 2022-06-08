@@ -13,6 +13,7 @@ from hash2passbot.apps.bot.handlers.common.make_subscription import register_mak
 from hash2passbot.apps.bot.handlers.errors.errors_handlers import register_error
 from hash2passbot.apps.bot.middleware.bot_middleware import BotMiddleware
 from hash2passbot.apps.bot.utils import start_up_message, checking_purchases
+from hash2passbot.config.config import load_yaml
 from hash2passbot.config.logg_settings import init_logging
 from hash2passbot.db import init_db, init_hash_db
 from hash2passbot.db.models import Statistic, User, Password
@@ -68,6 +69,7 @@ async def start():
     # Регистрация фильтров
 
     temp.STATS, _create = await Statistic.get_or_create(pk=1)
+    temp.MENU = load_yaml('menu.yaml') or {}
     scheduler.add_job(making_backup, "interval", hours=1)
     # todo 6/3/2022 5:35 PM taima:
     # scheduler.add_job(save_statistics, "interval", minutes=10)
